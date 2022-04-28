@@ -45,7 +45,7 @@ namespace HeroesApi.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin", Policy = "minAge")]
         public IActionResult CreateHero([FromBody] HeroDto heroDto)
         {
             Hero hero = _mapper.Map<Hero>(heroDto);
@@ -57,7 +57,7 @@ namespace HeroesApi.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin", Policy = "minAge")]
         public IActionResult UpdateHero(int id, [FromBody] HeroDto heroDto)
         {
             Hero hero = _context.Heroes.FirstOrDefault(hero => hero.Id == id);

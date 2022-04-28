@@ -1,5 +1,7 @@
+using HeroesApi.Authorization;
 using HeroesApi.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -28,6 +30,16 @@ builder.Services.AddAuthentication(auth =>
             ClockSkew = TimeSpan.Zero
         };
     });
+
+builder.Services.AddAuthorization(opt =>
+{
+    opt.AddPolicy("minAge", policy =>
+    {
+        policy.Requirements.Add(new MinAgeRequirement(18));
+    });
+});
+
+builder.Services.AddSingleton<IAuthorizationHandler, MinAgeHandler>();
 
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
