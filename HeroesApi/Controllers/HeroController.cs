@@ -2,6 +2,7 @@
 using HeroesApi.Data;
 using HeroesApi.Data.Dtos;
 using HeroesApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HeroesApi.Controllers
@@ -21,12 +22,14 @@ namespace HeroesApi.Controllers
 
 
         [HttpGet]
+        [Authorize(Roles = "admin, regular")]
         public IEnumerable<Hero> GetHeroes()
         {
             return _context.Heroes;
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "admin, regular")]
         public IActionResult GetHeroById(int id)
         {
             Hero hero = _context.Heroes.FirstOrDefault(hero => hero.Id == id);
@@ -42,6 +45,7 @@ namespace HeroesApi.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public IActionResult CreateHero([FromBody] HeroDto heroDto)
         {
             Hero hero = _mapper.Map<Hero>(heroDto);
@@ -53,6 +57,7 @@ namespace HeroesApi.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "admin")]
         public IActionResult UpdateHero(int id, [FromBody] HeroDto heroDto)
         {
             Hero hero = _context.Heroes.FirstOrDefault(hero => hero.Id == id);
@@ -70,6 +75,7 @@ namespace HeroesApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
         public IActionResult DeleteHero(int id)
         {
             Hero hero = _context.Heroes.FirstOrDefault(hero => hero.Id == id);
